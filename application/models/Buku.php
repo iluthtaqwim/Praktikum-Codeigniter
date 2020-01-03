@@ -1,6 +1,10 @@
 <?php
 
 class Buku extends CI_Model {
+
+	function get_buku_by_id($id){
+		return $this->db->get_where('buku',array('id'=>$id))->row_array();
+	}
 	
 	public function get_buku(){
 		
@@ -12,10 +16,27 @@ class Buku extends CI_Model {
 		
 		return $data;
 	}
+
+	function get_all_kategori(){
+		$query = $this->db->get('kategori');
+	
+		return $query;
+	}
     
-    public function add_buku($param){
-        $data = $this->db->insert('buku',$param);
+    public function add_buku($params){
+        $data = $this->db->insert('buku',$params);
         return $data;
-    }
+	}
+
+	function edit_buku($id,$params){
+		$this->db->where('id',$id);
+        
+        return $this->db->update('buku', $params);
+	}
+	
+	function delete($id){
+
+		return $this->db->delete('buku',array('id'=>$id));
+	}
 
 }

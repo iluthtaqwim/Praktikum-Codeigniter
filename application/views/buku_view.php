@@ -41,12 +41,12 @@
                     <td><img src="<?php echo $b['image']?>"/></td>
 					<td><?php echo $b['nama_kategori']?></td>
 					<td>
-						<a href="edit.php?id=<?php echo $b['id']?>"
+						<a href="<?php echo site_url('welcome/update/'.$b['id'])?>"
 						class="btn btn-success btn-sm">edit</a>
 					</td>
 					
 					<td>
-						<a href="delete.php?id=<?php echo $b['id']?>" class="btn btn-danger btn-sm"
+						<a href="<?php echo site_url('welcome/del/'.$b['id']) ?>" class="btn btn-danger btn-sm"
 						onclick="javascript: return confirm('Anda yakin hapus ?')">delete</a>
 					</td>
 				</tr>

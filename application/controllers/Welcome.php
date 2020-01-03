@@ -13,18 +13,25 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		$this->load->model('Buku');
-		$buku = $this->Buku->get_buku();
-		$output['buku'] = $buku;
-		
-		$this->load->view('buku_view', $output);
+
+		$test = array(
+            'buku'=>$this->Buku->get_buku(),
+            'kategori'=>$this->Buku->get_all_kategori()->result()
+        );
+		$this->load->view('buku_view', $test);
 	}
-	
+    
+    function get_all_kategori(){
+        $kategori= $this->Buku->get_all_kategori();
+        
+    }
+
 	function add()
     {   
        
         $this->load->helper('form');
         $this->load->library('form_validation');
-        $config['upload_path'] = './images';
+        $config['upload_path'] = './images/';
         $config['allowed_types'] = 'gif|jpg|png';
         $this->load->library('upload',$config);
         $this->upload->initialize($config);
@@ -38,7 +45,8 @@ class Welcome extends CI_Controller {
             $params = array(
                 'judul' => $this->input->post('title'),
 				'pengarang' => $this->input->post('authors'),
-				'th_terbit' => $this->input->post('th_terbit'),
+                'th_terbit' => $this->input->post('th_terbit'),
+                'id_kategori' => $this->input->post('cats'),
                 'image' => $photo,
             );
             $this->Buku->add_buku($params);
@@ -52,11 +60,46 @@ class Welcome extends CI_Controller {
     }
   
 	
-	public function edit($id){
-		echo 'edit buku id='.$id;
-	}
+	public function update($id){
+
+        $data['edits'] = $this->Buku->get_buku_by_id($id);
+
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $config['upload_path'] = './images/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $this->load->library('upload',$config);
+        $this->upload->initialize($config);
+        if(isset($_POST) && count($_POST) > 0)     
+        {   
+            if(!$this->upload->do_upload('image')){
+                $photo="";
+            }else{
+                $photo=$this->upload->file_name;
+            }
+            $params = array(
+                'judul' => $this->input->post('title'),
+				'pengarang' => $this->input->post('authors'),
+                'th_terbit' => $this->input->post('th_terbit'),
+                'id_kategori' => $this->input->post('cats'),
+                'image' => $photo,
+            );
+        $this->Buku->edit_buku($id,$params);
+        redirect('');
+        }else{
+            $this->load->view('edit');
+        }
+    }
+
 	
 	public function del($id){
-		echo 'delete buku id='.$id;
+        $buku = $this->Buku->get_buku_by_id($id);
+        
+        if(isset($buku['id'])){
+            $this->Buku->delete($id);
+            redirect('');
+        }else{
+           echo('ada yang salah');
+        }
 	}
 }

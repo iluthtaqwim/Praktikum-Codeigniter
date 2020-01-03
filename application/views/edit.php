@@ -14,9 +14,9 @@
     			<br />
                 <h2>Form tambah buku</h2>
 				
-			  <form action="" method="post" enctype="multipart/form-data">
+				<?php echo form_open_multipart('welcome/update/'.$edits['id']); ?>
 				  <div class="form-group">
-					<input type="text" name="title" class="form-control" placeholder="Judul Buku">           
+					<input type="text" name="title" class="form-control" placeholder="Judul Buku"><?php echo ($this->input->post('judul') ? $this->input->post('judul') : $edits['judul']); ?>           
 				  </div>
 				  <div class="form-group">           
 					<input type="text" name="authors" class="form-control" placeholder="Nama Pengarang">
@@ -30,14 +30,14 @@
 				  <div class="form-group">           
 					<select class="form-control" name="cats">
 						<option>-- Pilih Kategori --</option>
-						<?php foreach ($kategori as $row) :?>
-                                         <option value="<?php echo $row->id_kategori;?>"><?php echo $row->nama_kategori;?></option>
-                                       <?php endforeach;?>
+						<?php foreach($kategori as $cats){ ?>
+							<option value="<?php echo $cats['nama_kategori'] ?>"></option>
+						<?php }?>
 						
 					</select>
 				  </div>
 				  <button type="submit" class="btn btn-primary">Simpan</button>
-			  </form>
+				  <?php echo form_close(); ?>
         </div>
       </div>
     </div>
